@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>PVC Card - {{ $user->customer_id }}</title>
+    <style>
+        @page {
+            margin: 10mm;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DejaVu Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #ffffff;
+        }
+
+        .page-container {
+            width: 100%;
+            text-align: center;
+        }
+
+        .page-title {
+            font-size: 14pt;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10mm;
+            text-align: center;
+        }
+
+        .cards-wrapper {
+            display: table;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .card-container {
+            display: table-cell;
+            width: 100%;
+            padding: 1mm;
+            vertical-align: top;
+            text-align: center;
+			float:left;
+			position:relative
+        }
+
+        .card-label {
+            font-size: 10pt;
+            font-weight: bold;
+            color: #666;
+            margin-bottom: 3mm;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* CR80 Card Size - Increased for better visibility in PDF */
+        .pvc-card {
+            width: 120mm;
+            height: 75mm;
+            border-radius: 3mm;
+            overflow: hidden;
+            display: inline-block;
+            border: 0.5mm solid #333;
+        }
+
+        /* Front Card Styling - Using solid dark color instead of gradient */
+        .card-front {
+            width: 100%;
+            height: 100%;
+            background-color: #1a1a2e;
+            color: #ffffff;
+            padding: 5mm;
+            position: relative;
+        }
+
+        .front-header {
+            display: table;
+            width: 100%;
+            margin-bottom: 2mm;
+        }
+
+        .logo-section {
+            display: table-cell;
+            vertical-align: top;
+            width: 65%;
+        }
+
+        .logo-icon {
+            display: inline-block;
+            width: 12mm;
+            height: 12mm;
+            background-color: #ffd700;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 12mm;
+            font-weight: bold;
+            color: #1a1a2e;
+            font-size: 7mm;
+            vertical-align: middle;
+        }
+
+        .company-info {
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 3mm;
+        }
+
+        .company-name {
+            font-size: 5mm;
+            font-weight: bold;
+            color: #ffd700;
+            letter-spacing: 0.5mm;
+        }
+
+        .company-tagline {
+            font-size: 2.5mm;
+            color: #cccccc;
+            margin-top: 1mm;
+        }
+
+        .badge-section {
+            display: table-cell;
+            vertical-align: top;
+            text-align: right;
+            width: 35%;
+        }
+
+        .member-badge {
+            display: inline-block;
+            background-color: #ffd700;
+            color: #1a1a2e;
+            padding: 2mm 4mm;
+            border-radius: 1.5mm;
+            font-size: 3mm;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .front-body {
+            display: table;
+            width: 100%;
+            height: 42mm;
+        }
+
+        .photo-cell {
+            display: table-cell;
+            vertical-align: middle;
+            width: 20mm;
+        }
+
+        .customer-photo {
+            width: 20mm;
+            height: 26mm;
+            border-radius: 2mm;
+            border: 0.5mm solid #ffd700;
+        }
+
+        .photo-placeholder {
+            width: 20mm;
+            height: 26mm;
+            border-radius: 2mm;
+            border: 0.5mm solid #ffd700;
+            background-color: #2a2a4e;
+            text-align: center;
+            line-height: 32mm;
+            color: #ffd700;
+            font-size: 5mm;
+            font-weight: bold;
+        }
+
+        .info-cell {
+            display: table-cell;
+            vertical-align: middle;
+           /* padding-left: 1mm;
+            padding-right: 1mm;*/
+        }
+
+        .customer-name {
+            font-size: 3.5mm;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 2mm;
+            text-transform: uppercase;
+            letter-spacing: 0.3mm;
+        }
+
+        .customer-id {
+            font-size: 3.5mm;
+            color: #ffd700;
+            font-family: 'DejaVu Sans Mono', monospace;
+            margin-bottom: 2.5mm;
+            letter-spacing: 0.3mm;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 1.5mm 3mm;
+            border-radius: 1mm;
+            font-size: 2.8mm;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .status-active {
+            background-color: #28a745;
+            color: #ffffff;
+        }
+
+        .status-inactive {
+            background-color: #dc3545;
+            color: #ffffff;
+        }
+
+        .qr-cell {
+            display: table-cell;
+            vertical-align: middle;
+            width: 23mm;
+            text-align: left;
+        }
+
+        .qr-wrapper {
+            display: inline-block;
+            background-color: #ffffff;
+            padding: 1mm;
+            border-radius: 2mm;
+        }
+
+        .qr-code {
+            width: 20mm;
+            height: 20mm;
+        }
+
+        .front-footer {
+            display: table;
+            width: 100%;
+            margin-top: 3mm;
+            padding-top: 2mm;
+            border-top: 0.3mm solid #ffd700;
+        }
+
+        .member-since {
+            display: table-cell;
+            font-size: 2.8mm;
+            color: #cccccc;
+        }
+
+        .card-number {
+            display: table-cell;
+            text-align: right;
+            font-size: 2.8mm;
+            color: #ffd700;
+            font-family: 'DejaVu Sans Mono', monospace;
+        }
+
+        /* Back Card Styling */
+        .card-back {
+            width: 100%;
+            height: 100%;
+            background-color: #f5f5f5;
+            color: #333333;
+            padding: 4mm;
+        }
+
+        .back-header {
+            text-align: center;
+            margin-bottom: 2mm;
+            padding-bottom: 2mm;
+            border-bottom: 0.3mm solid #999;
+        }
+
+        .back-title {
+            font-size: 4mm;
+            font-weight: bold;
+            color: #1a1a2e;
+            text-transform: uppercase;
+            letter-spacing: 0.5mm;
+        }
+
+        .contact-info {
+            margin-bottom: 2mm;
+            text-align: left;
+            padding-left: 2mm;
+        }
+
+        .contact-item {
+            margin-bottom: 1.5mm;
+            font-size: 3mm;
+            color: #333333;
+        }
+
+        .contact-label {
+            display: inline-block;
+            font-weight: bold;
+            color: #1a1a2e;
+            width: 20mm;
+        }
+
+        .scan-notice {
+            background-color: #1a1a2e;
+            color: #ffd700;
+            text-align: center;
+            padding: 2.5mm;
+            border-radius: 2mm;
+            margin-bottom: 2mm;
+        }
+
+        .scan-notice-text {
+            font-size: 3mm;
+            font-weight: bold;
+        }
+
+        .terms-section {
+            border-top: 0.3mm solid #999;
+            padding-top: 2mm;
+            margin-bottom: 2mm;
+        }
+
+        .terms-title {
+            font-size: 2.5mm;
+            font-weight: bold;
+            color: #666;
+            margin-bottom: 1mm;
+        }
+
+        .terms-text {
+            font-size: 2mm;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .back-footer {
+            text-align: center;
+            font-size: 2.5mm;
+            color: #666;
+            margin-top: 2mm;
+            padding-top: 2mm;
+            border-top: 0.3mm solid #ccc;
+        }
+
+        .print-info {
+            margin-top: 10mm;
+            text-align: center;
+            font-size: 8pt;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <div class="page-title">PVC Customer Card - {{ $user->customer_id }}</div>
+
+        <div class="cards-wrapper">
+            <!-- Front Card -->
+            <div class="card-container">
+                <div class="card-label">Front Side</div>
+                <div class="pvc-card">
+                    <div class="card-front">
+                        <div class="front-header">
+                            <div class="logo-section">
+                                <span class="logo-icon">A</span>
+                                <div class="company-info">
+                                    <div class="company-name">AURUM & CO.</div>
+                                    <div class="company-tagline">Gold Investment Plan</div>
+                                </div>
+                            </div>
+                            <div class="badge-section">
+                                <span class="member-badge">MEMBER</span>
+                            </div>
+                        </div>
+
+                        <div class="front-body">
+                            <div class="photo-cell">
+                                @if($photoBase64)
+                                    <img src="{{ $photoBase64 }}" alt="Photo" class="customer-photo">
+                                @else
+                                    <div class="photo-placeholder">PHOTO</div>
+                                @endif
+                            </div>
+                            <div class="info-cell">
+                                <div class="customer-name">{{ $user->name }}</div>
+                                <div class="customer-id">{{ $user->customer_id }}</div>
+                                <span class="status-badge {{ $user->status == 'active' ? 'status-active' : 'status-inactive' }}">
+                                    {{ ucfirst($user->status) }}
+                                </span>
+                            </div>
+                            <div class="qr-cell">
+                                <div class="qr-wrapper">
+                                    <img src="{{ $qrCode }}" alt="QR Code" class="qr-code">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="front-footer">
+                            <span class="member-since">Member Since: {{ $user->created_at->format('M Y') }}</span>
+                            <span class="card-number">{{ substr($user->customer_id, -8) }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Back Card -->
+            <div class="card-container">
+                <div class="card-label">Back Side</div>
+                <div class="pvc-card">
+                    <div class="card-back">
+                        <div class="back-header">
+                            <div class="back-title">Aurum & Co. Membership Card</div>
+                        </div>
+
+                        <div class="contact-info">
+                            <div class="contact-item">
+                                <span class="contact-label">Helpline:</span>
+                                <span>+91 98765 43210</span>
+                            </div>
+                            <div class="contact-item">
+                                <span class="contact-label">Email:</span>
+                                <span>support@aurumco.com</span>
+                            </div>
+                            <div class="contact-item">
+                                <span class="contact-label">Website:</span>
+                                <span>www.aurumco.com</span>
+                            </div>
+                            <div class="contact-item">
+                                <span class="contact-label">Address:</span>
+                                <span>123 Gold Street, Business District</span>
+                            </div>
+                        </div>
+
+                        <div class="scan-notice">
+                            <div class="scan-notice-text">SCAN QR CODE FOR VERIFICATION</div>
+                        </div>
+
+                        <div class="terms-section">
+                            <div class="terms-title">Terms & Conditions</div>
+                            <div class="terms-text">
+                                This card is non-transferable and remains the property of Aurum & Co.
+                                Present this card for all transactions. Report lost cards immediately.
+                            </div>
+                        </div>
+
+                        <div class="back-footer">
+                            Valid only with photo ID | {{ $user->customer_id }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="print-info">
+            Card Size: CR80 (85.60mm x 53.98mm) | Print at 100% scale for accurate dimensions
+        </div>
+    </div>
+</body>
+</html>
