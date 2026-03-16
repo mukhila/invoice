@@ -10,7 +10,7 @@ class GoldRateController extends Controller
 {
     public function index()
     {
-        $goldRates = DailyGoldRate::with('creator')->orderBy('rate_date', 'desc')->get();
+        $goldRates = DailyGoldRate::with('creator')->orderBy('rate_date', 'desc')->paginate(20);
         return view('Admin.gold_rates.index', compact('goldRates'));
     }
 

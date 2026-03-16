@@ -23,7 +23,7 @@ class UserPlanController extends Controller
             $query->where('employee_id', session('admin_id'));
         }
 
-        $userPlans = $query->get();
+        $userPlans = $query->paginate(20);
         return view('Admin.user_plans.all_index', compact('userPlans'));
     }
 
@@ -53,7 +53,7 @@ class UserPlanController extends Controller
             $userPlan = UserPlan::create([
                 'user_id' => $user->id,
                 'plan_id' => $goldPlan->id,
-                'employee_id' => 1, // Defaulting to Admin/System
+                'employee_id' => session('admin_id'),
                 'start_date' => $startDate->format('Y-m-d'),
                 'maturity_date' => $maturityDate->format('Y-m-d'),
                 'total_paid' => 0,
@@ -98,7 +98,7 @@ class UserPlanController extends Controller
             Payment::create([
                 'user_id' => $userPlan->user_id,
                 'user_plan_id' => $userPlan->id,
-                'employee_id' => 1, // Default Admin/System
+                'employee_id' => session('admin_id'),
                 'amount' => $request->amount,
                 'payment_mode' => $request->payment_mode,
                 'payment_date' => now(),
@@ -152,7 +152,7 @@ class UserPlanController extends Controller
             $userPlan = UserPlan::create([
                 'user_id' => $user->id,
                 'plan_id' => $goldPlan->id,
-                'employee_id' => 1, // Defaulting to Admin/System. Ideally session('admin_id') or Auth::user()->id
+                'employee_id' => session('admin_id'),
                 'start_date' => $startDate->format('Y-m-d'),
                 'maturity_date' => $maturityDate->format('Y-m-d'),
                 'total_paid' => 0,

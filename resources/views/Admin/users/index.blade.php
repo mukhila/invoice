@@ -352,7 +352,7 @@
                                 <th>#</th>
                                 <th>Customer ID</th>
                                 <th>Name</th>
-                                <th>Email</th>
+                                <th>Fin No</th>
                                 <th>Mobile</th>
                                 <th>Created By</th>
                                 <th>Status</th>
@@ -362,10 +362,10 @@
                         <tbody>
                             @foreach ($users as $key => $user)
                             <tr>
-                                <td>{{ $key + 1 }}</td>
+                                <td>{{ $users->firstItem() + $key }}</td>
                                 <td>{{ $user->customer_id ?? 'N/A' }}</td>
                                 <td>{{ $user->name }}</td>
-                                <td>{{ $user->email }}</td>
+                                <td>{{ $user->fin_no ?? 'N/A' }}</td>
                                 <td>{{ $user->mobile }}</td>
                                 <td>{{ $user->creator->name ?? 'N/A' }}</td>
                                 <td>
@@ -397,6 +397,9 @@
                     </table>
                 </div>
 
+                <div class="mt-3">
+                    {{ $users->links() }}
+                </div>
             </div>
         </div>
     </div>

@@ -48,7 +48,7 @@
                         <tbody>
                             @foreach ($goldPlans as $key => $plan)
                             <tr>
-                                <td>{{ $key + 1 }}</td>
+                                <td>{{ $goldPlans->firstItem() + $key }}</td>
                                 <td>{{ $plan->plan_name }}</td>
                                 <td>{{ $plan->duration_months }}</td>
                                 <td>Rs. {{ number_format($plan->monthly_emi, 2) }}</td>
@@ -75,6 +75,9 @@
                     </table>
                 </div>
 
+                <div class="mt-3">
+                    {{ $goldPlans->links() }}
+                </div>
             </div>
         </div>
     </div>

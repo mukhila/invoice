@@ -47,7 +47,7 @@
                         <tbody>
                             @foreach ($employees as $key => $employee)
                             <tr>
-                                <td>{{ $key + 1 }}</td>
+                                <td>{{ $employees->firstItem() + $key }}</td>
                                 <td>{{ $employee->name }}</td>
                                 <td>{{ $employee->email }}</td>
                                 <td>{{ $employee->mobile }}</td>
@@ -73,6 +73,9 @@
                     </table>
                 </div>
 
+                <div class="mt-3">
+                    {{ $employees->links() }}
+                </div>
             </div>
         </div>
     </div>

@@ -33,49 +33,27 @@
                     </div>
                 @endif
 
-                <form action="{{ route('admin.users.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.users.store') }}" method="POST">
                     @csrf
                     <div class="mb-3">
-                        <label for="name" class="form-label">Name</label>
+                        <label for="name" class="form-label">Name <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" required>
                     </div>
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" required>
+                        <label for="fin_no" class="form-label">Fin No <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="fin_no" name="fin_no" value="{{ old('fin_no') }}" required>
                     </div>
                     <div class="mb-3">
-                        <label for="mobile" class="form-label">Mobile</label>
+                        <label for="mobile" class="form-label">Mobile <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="mobile" name="mobile" value="{{ old('mobile') }}" required>
                     </div>
                     <div class="mb-3">
                         <label for="dob" class="form-label">Date of Birth</label>
-                        <input type="date" class="form-control" id="dob" name="dob" value="{{ old('dob') }}" required>
+                        <input type="date" class="form-control" id="dob" name="dob" value="{{ old('dob') }}">
                     </div>
                     <div class="mb-3">
                         <label for="address" class="form-label">Address</label>
-                        <textarea class="form-control" id="address" name="address" rows="3" required>{{ old('address') }}</textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="id_proof" class="form-label">ID Proof Document (Upload)</label>
-                        <input type="file" class="form-control" id="id_proof" name="id_proof" accept="image/*,application/pdf">
-                    </div>
-                     <div class="mb-3">
-                        <label for="photo" class="form-label">User Photo (Passport Size)</label>
-                        <input type="file" class="form-control" id="photo" name="photo" accept="image/*">
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="created_by" class="form-label">Assigned Employee</label>
-                        <select class="form-select" id="created_by" name="created_by" required>
-                            @if(session('admin_role') == 'SuperAdmin')
-                                <option value="">Select Employee</option>
-                                @foreach ($employees as $employee)
-                                    <option value="{{ $employee->id }}" {{ old('created_by') == $employee->id ? 'selected' : '' }}>{{ $employee->name }}</option>
-                                @endforeach
-                            @else
-                                <option value="{{ session('admin_id') }}" selected>{{ session('admin_name') }}</option>
-                            @endif
-                        </select>
+                        <textarea class="form-control" id="address" name="address" rows="3">{{ old('address') }}</textarea>
                     </div>
 
                     <button type="submit" class="btn btn-primary">Create User</button>

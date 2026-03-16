@@ -7,7 +7,9 @@
       "Bash(php artisan cache:clear:*)",
       "Bash(git init:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(find /c/xampp/htdocs/invoice/database/migrations -name \"*employees*\" -o -name \"*gold_plans*\" -o -name \"*payments*\" | sort | xargs -I {} basename {})",
+      "Bash(find /c/xampp/htdocs/invoice -name \".env\" -type f | xargs wc -l)"
     ]
   }
 }

@@ -45,7 +45,7 @@
                         <tbody>
                             @foreach ($goldRates as $key => $rate)
                             <tr>
-                                <td>{{ $key + 1 }}</td>
+                                <td>{{ $goldRates->firstItem() + $key }}</td>
                                 <td>{{ \Carbon\Carbon::parse($rate->rate_date)->format('d M Y') }}</td>
                                 <td>Rs. {{ number_format($rate->rate_per_gram, 2) }}</td>
                                 <td>{{ $rate->creator->name ?? 'N/A' }}</td>
@@ -63,6 +63,9 @@
                     </table>
                 </div>
 
+                <div class="mt-3">
+                    {{ $goldRates->links() }}
+                </div>
             </div>
         </div>
     </div>

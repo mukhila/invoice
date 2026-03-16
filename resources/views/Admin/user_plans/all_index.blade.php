@@ -48,7 +48,7 @@
                         <tbody>
                             @foreach ($userPlans as $key => $plan)
                             <tr>
-                                <td>{{ $key + 1 }}</td>
+                                <td>{{ $userPlans->firstItem() + $key }}</td>
                                 <td>{{ $plan->user->name }} <br> <small class="text-muted">{{ $plan->user->customer_id }}</small></td>
                                 <td>{{ $plan->plan->plan_name }}</td>
                                 <td>{{ \Carbon\Carbon::parse($plan->start_date)->format('d M Y') }}</td>
@@ -74,6 +74,9 @@
                     </table>
                 </div>
 
+                <div class="mt-3">
+                    {{ $userPlans->links() }}
+                </div>
             </div>
         </div>
     </div>

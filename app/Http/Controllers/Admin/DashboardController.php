@@ -14,11 +14,6 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // Simple middleware check simulation
-        if (!session()->has('admin_id')) {
-            return redirect()->route('admin.login');
-        }
-
         $adminId = session('admin_id');
         $role = session('admin_role');
 
@@ -102,10 +97,6 @@ class DashboardController extends Controller
     }
     public function profile()
     {
-        if (!session()->has('admin_id')) {
-            return redirect()->route('admin.login');
-        }
-
         $admin = \App\Models\Employee::findOrFail(session('admin_id'));
         return view('Admin.profile', compact('admin'));
     }

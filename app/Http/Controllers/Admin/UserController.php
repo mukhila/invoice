@@ -19,45 +19,33 @@ class UserController extends Controller
             $query->where('created_by', session('admin_id'));
         }
 
-        $users = $query->get();
+        $users = $query->paginate(20);
         return view('Admin.users.index', compact('users'));
     }
 
     public function create()
     {
-        $employees = Employee::where('status', 'active')->get();
-        return view('Admin.users.create', compact('employees'));
+        return view('Admin.users.create');
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
+            'name'   => 'required',
+            'fin_no' => 'required',
             'mobile' => 'required|unique:users',
-            'email' => 'required|email|unique:users',
-            'dob' => 'required|date',
-            'address' => 'required',
-            'created_by' => 'required|exists:employees,id',
-            'id_proof' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:2048',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'dob'    => 'nullable|date',
+            'address' => 'nullable',
         ]);
 
-        $data = $request->except(['id_proof', 'photo']); // Handle files separately
-        
-        // File Upload Logic
-        if ($request->hasFile('id_proof')) {
-            $data['id_proof'] = $request->file('id_proof')->store('id_proofs', 'public');
-        }
+        $data = $request->only(['name', 'fin_no', 'mobile', 'dob', 'address']);
+        $data['created_by'] = session('admin_id');
 
-        if ($request->hasFile('photo')) {
-            $data['photo'] = $request->file('photo')->store('photos', 'public');
-        }
-        
         // Auto-generate customer ID: CUST-{RANDOM}-{TIMESTAMP}
         $data['customer_id'] = 'CUST-' . strtoupper(Str::random(4)) . '-' . time();
-        
-        // Default password
-        $data['password'] = Hash::make('123456');
+
+        // Set a secure random password (customers authenticate via mobile + DOB)
+        $data['password'] = Hash::make(Str::random(16));
 
         User::create($data);
 
@@ -67,8 +55,7 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::findOrFail($id);
-        $employees = Employee::where('status', 'active')->get();
-        return view('Admin.users.edit', compact('user', 'employees'));
+        return view('Admin.users.edit', compact('user'));
     }
 
     public function update(Request $request, $id)
@@ -76,26 +63,15 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         
         $request->validate([
-            'name' => 'required',
+            'name'   => 'required',
+            'fin_no' => 'required',
             'mobile' => 'required|unique:users,mobile,' . $id,
-            'email' => 'required|email|unique:users,email,' . $id,
-            'address' => 'required',
-            'created_by' => 'required|exists:employees,id',
-            'id_proof' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:2048',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'dob'    => 'nullable|date',
+            'address' => 'nullable',
         ]);
 
-        $data = $request->except(['id_proof', 'photo']); // Handle files separately
-        
-        // File Upload Logic
-        if ($request->hasFile('id_proof')) {
-            $data['id_proof'] = $request->file('id_proof')->store('id_proofs', 'public');
-        }
+        $data = $request->only(['name', 'fin_no', 'mobile', 'dob', 'address']);
 
-        if ($request->hasFile('photo')) {
-            $data['photo'] = $request->file('photo')->store('photos', 'public');
-        }
-        
         $user->update($data);
 
         return redirect()->route('admin.users.index')->with('success', 'User updated successfully');

@@ -10,7 +10,7 @@ class GoldPlanController extends Controller
 {
     public function index()
     {
-        $goldPlans = GoldPlan::latest()->get();
+        $goldPlans = GoldPlan::latest()->paginate(20);
         return view('Admin.gold_plans.index', compact('goldPlans'));
     }
 

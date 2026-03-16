@@ -37,34 +37,24 @@
                     @csrf
                     @method('PUT')
                     <div class="mb-3">
-                        <label for="name" class="form-label">Name</label>
+                        <label for="name" class="form-label">Name <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $user->name) }}" required>
                     </div>
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" value="{{ old('email', $user->email) }}" required>
+                        <label for="fin_no" class="form-label">Fin No <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="fin_no" name="fin_no" value="{{ old('fin_no', $user->fin_no) }}" required>
                     </div>
                     <div class="mb-3">
-                        <label for="mobile" class="form-label">Mobile</label>
+                        <label for="mobile" class="form-label">Mobile <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="mobile" name="mobile" value="{{ old('mobile', $user->mobile) }}" required>
                     </div>
                     <div class="mb-3">
+                        <label for="dob" class="form-label">Date of Birth</label>
+                        <input type="date" class="form-control" id="dob" name="dob" value="{{ old('dob', $user->dob) }}">
+                    </div>
+                    <div class="mb-3">
                         <label for="address" class="form-label">Address</label>
-                        <textarea class="form-control" id="address" name="address" rows="3" required>{{ old('address', $user->address) }}</textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="id_proof" class="form-label">ID Proof (Optional)</label>
-                        <input type="text" class="form-control" id="id_proof" name="id_proof" value="{{ old('id_proof', $user->id_proof) }}">
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="created_by" class="form-label">Assigned Employee</label>
-                        <select class="form-select" id="created_by" name="created_by" required>
-                            <option value="">Select Employee</option>
-                            @foreach ($employees as $employee)
-                                <option value="{{ $employee->id }}" {{ old('created_by', $user->created_by) == $employee->id ? 'selected' : '' }}>{{ $employee->name }}</option>
-                            @endforeach
-                        </select>
+                        <textarea class="form-control" id="address" name="address" rows="3">{{ old('address', $user->address) }}</textarea>
                     </div>
 
                     <button type="submit" class="btn btn-primary">Update User</button>
